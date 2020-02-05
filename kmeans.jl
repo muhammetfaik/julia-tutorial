@@ -1,8 +1,12 @@
 using LinearAlgebra
+using Plots
+import Pkg
+Pkg.add("RecipesBase")
+using RecipesBase
 function kmeans(x,k;maxiters = 100,tol = 1e-5)
     N = length(x)
     n = length(x[1])
-    distances = zero(N)
+    distances = zeros(N)
     reps = [zeros(n) for j=1:k]
     # ’assignment’ is an array of N integers between 1 and k.
     # The initial assignment is chosen randomly.
@@ -24,3 +28,10 @@ function kmeans(x,k;maxiters = 100,tol = 1e-5)
     Jprevious = J   
     end
 end
+X = vcat( [ 0.3*randn(2) for i = 1:100 ],
+[ [1,1] + 0.3*randn(2) for i = 1:100 ],
+[ [1,-1] + 0.3*randn(2) for i = 1:100 ] )
+scatter([x[1] for x in X], [x[2] for x in X])
+plot!(legend = false, grid = false, size = (500,500),
+xlims = (-1.5,2.5), ylims = (-2,2))
+assignment, reps = kmeans(X, 3)
